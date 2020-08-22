@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const {ehAdmin} = require("../helpers/ehAdmin");
+const bcrypt = require('bcryptjs');
+const passport = require("passport");
+//const{ehAdmin} = require("../helper/ehAdmin");
 
 require("../models/Usuario");
 const Usuario = mongoose.model("usuarios");
@@ -12,15 +14,15 @@ const Categoria = mongoose.model("categorias");
 require("../models/Postagem");
 const Postagem = mongoose.model("postagens");
 
-router.get('/', ehAdmin, (req,res)=>{
+router.get('/', (req,res)=>{
   res.render('admin/index');
 });
 
-router.get('/posts', ehAdmin, (req,res)=>{
+router.get('/posts', (req,res)=>{
   res.send("Pagina de posts");
 });
 
-router.get('/categorias', ehAdmin, (req,res)=>{
+router.get('/categorias', (req,res)=>{
   Categoria.find().lean().sort({_creationDate: 'desc'}).then((categorias)=>{
     res.render("admin/categorias", {categorias: categorias});
   }).catch((err)=> {
@@ -30,11 +32,11 @@ router.get('/categorias', ehAdmin, (req,res)=>{
 
 });
 
-router.get('/categorias/add', ehAdmin, (req,res)=>{
+router.get('/categorias/add', (req,res)=>{
   res.render("admin/addcategorias");
 });
 
-router.post('/categorias/nova', ehAdmin, (req,res)=>{
+router.post('/categorias/nova', (req,res)=>{
 
   var erros = [];
 
@@ -64,7 +66,7 @@ router.post('/categorias/nova', ehAdmin, (req,res)=>{
   }
 });
 
-router.post('/usuarios/nova', ehAdmin, (req,res)=>{
+router.post('/usuarios/nova', (req,res)=>{
   const novoUsuario = {
     nome: req.body.nome,
     sobrenome: req.body.sobrenome,
@@ -78,7 +80,7 @@ router.post('/usuarios/nova', ehAdmin, (req,res)=>{
   })
 });
 
-router.get("/categorias/edit/:id", ehAdmin, (req,res)=>{
+router.get("/categorias/edit/:id", (req,res)=>{
   Categoria.findOne({_id: req.params.id}).lean().then((categoria)=>{
     res.render("admin/editcategorias",{categoria: categoria});
   }).catch((err) => {
@@ -87,7 +89,7 @@ router.get("/categorias/edit/:id", ehAdmin, (req,res)=>{
   })
 });
 
-router.post("/categorias/edit", ehAdmin, (req,res)=>{
+router.post("/categorias/edit", (req,res)=>{
   Categoria.findOne({_id: req.body.id}).then((categoria)=>{
 
     if(req.body.nome)
@@ -111,7 +113,7 @@ router.post("/categorias/edit", ehAdmin, (req,res)=>{
 });
 
 
-router.post("/categorias/delete", ehAdmin, (req,res)=>{
+router.post("/categorias/delete", (req,res)=>{
   Categoria.remove({_id: req.body.id}).then(()=>{
       req.flash("success_msg", "Categoria deletada com sucesso!");
       res.redirect("/admin/categorias");
@@ -121,7 +123,7 @@ router.post("/categorias/delete", ehAdmin, (req,res)=>{
   })
 });
 
-router.get('/postagens', ehAdmin, (req,res)=>{
+router.get('/postagens', (req,res)=>{
   Postagem.find().lean().populate("categoria").sort({_creationDate:"desc"}).then((postagens)=>{
     res.render("admin/postagens", {postagens: postagens});
   }).catch((err)=>{
@@ -130,7 +132,7 @@ router.get('/postagens', ehAdmin, (req,res)=>{
   })
 });
 
-router.get('/postagens/add', ehAdmin, (req,res)=>{
+router.get('/postagens/add', (req,res)=>{
 
   Categoria.find().lean().then((categorias)=>{
     res.render("admin/addpostagens", {categorias: categorias});
@@ -140,7 +142,7 @@ router.get('/postagens/add', ehAdmin, (req,res)=>{
   })
 });
 
-router.post('/postagens/nova', ehAdmin, (req,res)=>{
+router.post('/postagens/nova', (req,res)=>{
 
   var erros = [];
 
@@ -171,7 +173,7 @@ router.post('/postagens/nova', ehAdmin, (req,res)=>{
   }
 });
 
-router.get("/postagens/edit/:id", ehAdmin, (req,res)=>{
+router.get("/postagens/edit/:id", (req,res)=>{
   Postagem.findOne({_id: req.params.id}).lean().then((postagens)=>{
     Categoria.find().lean().then((categorias)=>{
       res.render("admin/editpostagens",{postagens: postagens, categorias: categorias});
@@ -182,7 +184,7 @@ router.get("/postagens/edit/:id", ehAdmin, (req,res)=>{
   });
 });
 
-router.post("/postagens/edit", ehAdmin, (req,res)=>{
+router.post("/postagens/edit", (req,res)=>{
   Postagem.findOne({_id: req.body.id}).then((postagem)=>{
 
     if(req.body.titulo)
@@ -216,7 +218,7 @@ router.post("/postagens/edit", ehAdmin, (req,res)=>{
 });
 
 // Maneira não segura
-router.get("/postagens/delete/:id", ehAdmin, (req,res)=> {
+router.get("/postagens/delete/:id", (req,res)=> {
   Postagem.remove({_id: req.params.id}).then(()=>{
     req.flash("success_msg", "Postagem deletada com sucesso!");
     res.redirect("/admin/postagens");
