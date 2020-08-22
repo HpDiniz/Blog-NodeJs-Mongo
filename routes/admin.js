@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const { CONSOLE_APPENDER } = require('karma/lib/constants');
 const {ehAdmin} = require("../helpers/ehAdmin");
 
 require("../models/Usuario");
