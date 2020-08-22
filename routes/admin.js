@@ -153,22 +153,37 @@ router.post('/postagens/nova', (req,res)=>{
   if(erros.length > 0){
     res.render("admin/addpostagens", {erros: erros});
   } else {
-    const novaPostagem = {
-      nome: req.body.titulo,
-      descricao: req.body.descricao,
-      titulo: req.body.titulo,
-      conteudo: req.body.conteudo,
-      categoria: req.body.categoria,
-      slug: req.body.slug
-    }
 
-    new Postagem(novaPostagem).save().then(()=>{
-      req.flash("success_msg", "Postagem criada com sucesso!");
-      res.redirect("/admin/postagens");
-    }).catch(err => {
-      console.log(err);
-      req.flash("error_msg", err);
-      res.redirect("/admin/postagens");
+    var slug = req.body.titulo.replace(/[^\w\s]/gi, '').toLowerCase().replace(/ /g, "-");
+
+    Postagem.findOne({slug: slug}).then((postagem) => {
+      if(postagem){
+
+        req.flash("error_msg", "Já existe uma postagem com este título.");
+        res.redirect("/admin/postagens");
+
+      }else{
+
+        var descricao = req.body.conteudo.substring(0, 70) + "...";
+
+        const novaPostagem = {
+          nome: req.body.titulo,
+          descricao: descricao,
+          titulo: req.body.titulo,
+          conteudo: req.body.conteudo,
+          categoria: req.body.categoria,
+          slug: slug
+        }
+
+        new Postagem(novaPostagem).save().then(()=>{
+          req.flash("success_msg", "Postagem criada com sucesso!");
+          res.redirect("/admin/postagens");
+        }).catch(err => {
+          console.log(err);
+          req.flash("error_msg", err);
+          res.redirect("/admin/postagens");
+        })
+      }
     })
   }
 });
@@ -190,14 +205,10 @@ router.post("/postagens/edit", (req,res)=>{
     if(req.body.titulo)
       postagem.titulo = req.body.titulo;
 
-    if(req.body.slug)
-      postagem.slug = req.body.slug;
-
-    if(req.body.descricao)
-      postagem.descricao = req.body.descricao;
-
-    if(req.body.categoria)
+    if(req.body.categoria){
       postagem.categoria = req.body.categoria;
+      postagem.descricao = req.body.conteudo.substring(0, 70) + "...";
+    }
 
     if(req.body.conteudo)
       postagem.conteudo = req.body.conteudo;

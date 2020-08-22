@@ -35,6 +35,12 @@ app.use((req, res, next) => {
   res.locals.error_msg = req.flash("error_msg");
   res.locals.error = req.flash("error");
   res.locals.user = (req.user || null);
+  if(res.locals.user){
+    if(res.locals.user.tipo == 1)
+      res.locals.admin = true;
+    else
+      res.locals.admin = null;
+  }
   next();
 });
 

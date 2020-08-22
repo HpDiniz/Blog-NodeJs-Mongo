@@ -4,7 +4,11 @@
   <hr class="my-4">
   <p>Junte-se a nós nessa propagação de lixo radioativo!</p>
   <p class="lead">
-    <a class="btn btn-primary btn-lg" href="/usuarios/registro" role="button">Registre-se já!</a>
+    {{#if user}}
+      <a class="btn btn-primary btn-lg" href="/admin/postagens" role="button">Publique agora!</a>
+    {{else}}
+      <a class="btn btn-primary btn-lg" href="/usuarios/registro" role="button">Registre-se já!</a>
+    {{/if}}
   </p>
 </div>
 

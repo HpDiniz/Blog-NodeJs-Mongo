@@ -11,12 +11,14 @@
       <p>Descrição: {{descricao}}</p>
       <small>Data: {{_creationDate}}</small><br>
       <small>Categoria: {{categoria.nome}}</small><br>
-      <a href="/admin/postagens/edit/{{_id}}">
-        <button class="btn-sm btn btn-primary mt-3">Editar postagem</button>
-      </a>
-      <a href="/admin/postagens/delete/{{_id}}">
-        <button class="btn-sm btn btn-danger mt-3">Deletar postagem</button>
-      </a>
+      {{#if admin}}
+        <a href="/admin/postagens/edit/{{_id}}">
+          <button class="btn-sm btn btn-primary mt-3">Editar postagem</button>
+        </a>
+        <a href="/admin/postagens/delete/{{_id}}">
+          <button class="btn-sm btn btn-danger mt-3">Deletar postagem</button>
+        </a>
+      {{/if}}
     </div>
   </div>
 {{else}}

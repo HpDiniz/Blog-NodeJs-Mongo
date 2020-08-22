@@ -23,10 +23,6 @@ const Usuario = new Schema({
     type: Date,
     default: Date.now()
   },
-  _lastUpdateDate: {
-    type: Date,
-    default: Date.now()
-  }
 });
 
 mongoose.model('usuarios', Usuario);

@@ -26,10 +26,6 @@ const Postagem = new Schema({
   _creationDate: {
     type: Date,
     default: Date.now()
-  },
-  _lastUpdateDate: {
-    type: Date,
-    default: Date.now()
   }
 });
 
