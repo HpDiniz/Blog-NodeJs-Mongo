@@ -1,0 +1,28 @@
+<div class="jumbotron">
+  <h1 class="display-4">Bem vindo ao Blog do Gapê</h1>
+  <p class="lead">Nesse blog você ficará por dentro das novidades mais inúteis do nosso planeta!</p>
+  <hr class="my-4">
+  <p>Junte-se a nós nessa propagação de lixo radioativo!</p>
+  <p class="lead">
+    <a class="btn btn-primary btn-lg" href="#" role="button">Registre-se já!</a>
+  </p>
+</div>
+
+<h2>Postagens recentes:</h2>
+
+{{#each postagens}}
+<div class="card mt-3">
+  <div class="card-body">
+      <h5>{{titulo}}</h5>
+      <p>{{descricao}}</p>
+      <a href="/postagem/{{slug}}"><button class="btn-sm btn-success">Leia mais</button></a>
+      <hr>
+      <small>Data de publicação: {{_creationDate}}</small>
+  </div>
+</div>
+{{else}}
+  <h5>Nenhuma postagem</h5>
+{{/each}}
+
+
+
