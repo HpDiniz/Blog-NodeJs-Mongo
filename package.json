@@ -25,6 +25,7 @@
     "express-handlebars": "^5.1.0",
     "express-session": "^1.17.1",
     "mongoose": "^5.9.28",
+    "express": "*",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "rxjs": "~6.5.5",
