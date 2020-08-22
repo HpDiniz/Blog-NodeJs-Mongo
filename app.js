@@ -119,37 +119,3 @@ mongoose.connect(db.mongoURI, {
 }).catch( err => {
   console.log("Houve um erro ao se conectar ao mongoDB: " + err)
 });
-
-/*
-const UserSchema = mongoose.Schema({
-  nome: {
-    type: String,
-    require: true
-  },
-  sobrenome: {
-    type: String,
-  },
-  email: {
-    type: String,
-    require: true
-  },
-  tipo: {
-    type: String,
-    require: true
-  }
-});
-
-mongoose.model('users', UserSchema);
-
-const user = mongoose.model('users');
-new user({
-  nome: "Jonas",
-  sobrenome: "Lemos",
-  email: "jonas.lemos@gmail.com",
-  tipo: "admin"
-}).save().then(() => {
-  console.log("Usuário cadastrado com sucesso");
-}).catch((err)=>{
-  console.log("Falha ao criar usuário");
-})
- */
